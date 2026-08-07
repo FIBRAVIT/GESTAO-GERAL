@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Grupo Fibravit — Sistema de Gestão de Qualidade</title>
+<link href="css/style.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    .login-page {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #10243A 0%, #205587 50%, #10243A 100%);
+      display: flex; align-items: center; justify-content: center; padding: 20px;
+    }
+    .login-container { width: 100%; max-width: 420px; }
+    .login-logo { text-align: center; margin-bottom: 32px; }
+    .login-logo .logo-box {
+      width: 80px; height: 80px;
+      background: rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 32px; font-weight: 900; color: white;
+      backdrop-filter: blur(10px);
+    }
+    .login-logo h1 { color: white; font-size: 22px; font-weight: 800; letter-spacing: 1px; }
+    .login-logo p { color: rgba(255,255,255,0.6); font-size: 13px; margin-top: 4px; }
+    .login-card { background: white; border-radius: 20px; padding: 36px; box-shadow: 0 24px 64px rgba(0,0,0,0.3); }
+    .login-card h2 { font-size: 20px; font-weight: 700; color: #10243A; margin-bottom: 6px; }
+    .login-card .subtitle { font-size: 13px; color: #64748b; margin-bottom: 28px; }
+    .login-form .form-group { margin-bottom: 18px; }
+    .login-form label { display: block; font-size: 12px; font-weight: 700; color: #10243A; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .login-form input { width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 14px; color: #1e293b; transition: all 0.2s; font-family: inherit; }
+    .login-form input:focus { outline: none; border-color: #245E94; box-shadow: 0 0 0 3px rgba(36,94,148,0.12); }
+    .btn-login { width: 100%; padding: 13px; background: linear-gradient(135deg, #205587, #245E94); color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; margin-top: 8px; letter-spacing: 0.5px; }
+    .btn-login:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(36,94,148,0.4); }
+    .login-footer { text-align: center; margin-top: 20px; font-size: 12px; color: #94a3b8; }
+    .login-error { background: #fee2e2; color: #991b1b; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; display: none; }
+    .input-icon { position: relative; }
+    .input-icon span { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 16px; }
+    .input-icon input { padding-left: 42px; }
+  </style>
+</head>
+<body>
+<!-- ===== LOGIN ===== -->
+<div class="login-page" id="loginPage">
+<div class="login-container">
+<div class="login-logo">
+<div class="logo-box">GF</div>
+<h1>GRUPO FIBRAVIT</h1>
+<p>Sistema de Gestão de Qualidade</p>
+</div>
+<div class="login-card">
+<h2>Bem-vindo de volta 👋</h2>
+<p class="subtitle">Faça login para acessar o sistema</p>
+<div class="login-error" id="loginError">Usuário ou senha incorretos.</div>
+<div class="login-form">
+<div class="form-group">
+<label>Usuário</label>
+<div class="input-icon">
+<span>👤</span>
+<input id="loginUser" placeholder="Digite seu usuário" type="text"/>
+</div>
+</div>
+<div class="form-group">
+<label>Senha</label>
+<div class="input-icon">
+<span>🔒</span>
+<input id="loginPass" placeholder="Digite sua senha" type="password"/>
+</div>
+</div>
+<button class="btn-login" onclick="doLogin()">Entrar no Sistema →</button>
+</div>
+<div class="login-footer">Grupo Fibravit © 2026 — Gestão de Qualidade</div>
+</div>
+</div>
+</div>
+<!-- ===== SISTEMA PRINCIPAL ===== -->
+<div id="mainApp" style="display:none;">
+<aside class="sidebar" id="sidebar">
+<div class="sidebar-logo">
+<div class="logo-icon">GF</div>
+<h2>GRUPO FIBRAVIT</h2>
+<p>Gestão de Qualidade</p>
+</div>
+<nav class="sidebar-nav">
+<div class="nav-section">Principal</div>
+<a class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')">
+<span class="icon">📊</span> Dashboard Geral
+      </a>
+<div class="nav-section">Registros</div>
+<a class="nav-item" data-page="anomalias" onclick="navigate('anomalias')">
+<span class="icon">⚠️</span> Anomalias
+      </a>
+<a class="nav-item" data-page="ncs" onclick="navigate('ncs')">
+<span class="icon">🔴</span> Não Conformidades
+      </a>
+<a class="nav-item" data-page="reclamacoes" onclick="navigate('reclamacoes')">
+<span class="icon">📣</span> Reclamações
+      </a>
+<a class="nav-item" data-page="plano_acao" onclick="navigate('plano_acao')">
+<span class="icon">📋</span> Plano de Ação
+      </a>
+<a class="nav-item" data-page="atividades" onclick="navigate('atividades')">
+<span class="icon">✅</span> Atividades
+      </a>
+<div class="nav-section">Relatórios</div>
+<a class="nav-item" data-page="rel_anomalias" onclick="navigate('rel_anomalias')">
+<span class="icon">📈</span> Rel. Anomalias
+      </a>
+<a class="nav-item" data-page="rel_qualidade" onclick="navigate('rel_qualidade')">
+<span class="icon">📉</span> Rel. Qualidade
+      </a>
+<a class="nav-item" data-page="coordenadores" onclick="navigate('coordenadores')">
+<span class="icon">👥</span> Avaliação Coordenadores
+      </a>
+<div class="nav-section">Configurações</div>
+<a class="nav-item" data-page="cadastros" onclick="navigate('cadastros')">
+<span class="icon">⚙️</span> Cadastros
+      </a>
+<a class="nav-item" data-page="google_sheets" onclick="navigate('google_sheets')">
+<span class="icon">🔗</span> Google Sheets
+      </a>
+</nav>
+<div class="sidebar-footer">v1.0 — 2026</div>
+</aside>
+<div class="main-content">
+<header class="topbar">
+<div class="topbar-title">
+<h1 id="pageTitle">Dashboard Geral</h1>
+<p id="pageSubtitle">Visão consolidada do sistema</p>
+</div>
+<div class="topbar-actions">
+<span class="gs-badge" id="sheetsBadge">⬜ Sheets não conectado</span>
+<div class="user-badge">👤 <span id="userNameBadge">Admin</span></div>
+<button class="btn btn-outline btn-sm" onclick="doLogout()">Sair</button>
+</div>
+</header>
+<div class="page-content" id="pageContent"></div>
+</div>
+</div>
+<div class="toast" id="toast-global"></div>
+<script src="js/dados.js"></script>
+<script src="js/app.js"></script>
+<script src="js/pages.js"></script>
+<script>
+  // ===== USUÁRIOS =====
+  const USERS = [
+    { user: 'admin',   pass: 'fibravit2026', name: 'Administrador',    role: 'admin' },
+    { user: 'jose',    pass: 'jose2026',     name: 'José Afonso',      role: 'coord' },
+    { user: 'jhully',  pass: 'jhully2026',   name: 'Jhully',           role: 'coord' },
+    { user: 'davi',    pass: 'davi2026',     name: 'Davi',             role: 'coord' },
+    { user: 'gabriel', pass: 'gabriel2026',  name: 'Gabriel',          role: 'coord' },
+    { user: 'gilmar',  pass: 'diretor2026',  name: 'Gilmar (Diretor)', role: 'diretor' }
+  ];
+
+  function doLogin() {
+    const u = document.getElementById('loginUser').value.trim().toLowerCase();
+    const p = document.getElementById('loginPass').value.trim();
+    const found = USERS.find(x => x.user === u && x.pass === p);
+    if (found) {
+      sessionStorage.setItem('fibravit_user', JSON.stringify(found));
+      document.getElementById('loginPage').style.display = 'none';
+      document.getElementById('mainApp').style.display = 'block';
+      document.getElementById('userNameBadge').textContent = found.name;
+      initLocalData();
+      APPS_SCRIPT_URL = localStorage.getItem('fibravit_script_url') || '';
+      navigate('dashboard');
+      updateScriptBadge();
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+    }
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && document.getElementById('loginPage').style.display !== 'none') doLogin();
+  });
+
+  function doLogout() {
+    sessionStorage.removeItem('fibravit_user');
+    document.getElementById('loginPage').style.display = 'flex';
+    document.getElementById('mainApp').style.display = 'none';
+  }
+
+  // Auto-login se sessão ativa
+  const savedUser = sessionStorage.getItem('fibravit_user');
+  if (savedUser) {
+    const u = JSON.parse(savedUser);
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'block';
+    document.getElementById('userNameBadge').textContent = u.name;
+    initLocalData();
+    APPS_SCRIPT_URL = localStorage.getItem('fibravit_script_url') || '';
+    navigate('dashboard');
+    updateScriptBadge();
+  }
+</script>
+</body>
+</html>
